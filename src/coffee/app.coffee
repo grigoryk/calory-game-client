@@ -58,17 +58,14 @@ game.Main =
         dishes: game.Dish.list()
 
     view: (ctrl) ->
-        [
-            m ".container-fluid", [
-                m "h1", "How many calories?"
-                m "div.dishes",
-                    ctrl.dishes().map (dish) -> m.component game.DishComponent, dish
+        ctrl.dishes().map (dish) ->
+            [
+                m.component game.DishComponent, dish
+                m "h3", "Guess how many:"
+                m.component game.Guess, dish
             ]
-        ]
 
-# ROUTES
 m.route.mode = "hash"
-
-m.route document.body, "/game",
+m.route document.getElementById("app"), "/game",
     "/login": game.Login
     "/game": game.Main
