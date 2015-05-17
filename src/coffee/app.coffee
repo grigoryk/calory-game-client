@@ -3,36 +3,42 @@ game = {}
 # COMPONENTS
 game.DishComponent =
     view: (ctrl, dish) ->
-        m "div.dish", [
-            dish.images.map (img) ->
-                m "img",
-                    src: img.image
+        m "div.dish",
+            m "div.images",
+                dish.images.map (img) ->
+                    m "img",
+                        src: img.image
             m "span.description", dish.description
-        ]
 
 # MODEL
-game.Dish = {}
-game.Dish.list = () ->
-    m.request
-        method: "GET"
-        url: "http://127.0.0.1:8000/api/dishes/?format=json"
+game.Dish =
+    list: ->
+        m.request
+            method: "GET"
+            url: "http://127.0.0.1:8000/api/dishes/?format=json"
 
-game.vm = {}
-game.vm.init = ->
-    @dishes = game.Dish.list()
+game.Login =
+    view: ->
+        [
+            m "h1", "Login"
+        ]
 
-# VIEW
-game.view = ->
-    [
-        m "h1", "How many calories?",
-        game.vm.dishes().map (dish) -> m.component game.DishComponent, dish
-    ]
+game.Main =
+    controller: ->
+        dishes: game.Dish.list()
 
-# CONTROLLER
-game.controller = ->
-    game.vm.init()
+    view: (ctrl) ->
+        [
+            m ".container-fluid", [
+                m "h1", "How many calories?"
+                m "div.dishes",
+                    ctrl.dishes().map (dish) -> m.component game.DishComponent, dish
+            ]
+        ]
 
-# RENDER
-m.mount document,
-    controller: game.controller
-    view: game.view
+# ROUTES
+m.route.mode = "hash"
+
+m.route document.body, "/game",
+    "/login": game.Login
+    "/game": game.Main
