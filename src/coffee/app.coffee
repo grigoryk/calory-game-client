@@ -18,10 +18,9 @@ game.ImageViewer =
 game.DishComponent =
     view: (ctrl, dish) ->
         m "div.dish",
+            m "h2", dish.description
             m.component game.ImageViewer, dish.images
-            m "span.description", dish.description
 
-# MODEL
 game.Dish =
     list: ->
         m.request
