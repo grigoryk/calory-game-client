@@ -34,6 +34,25 @@ game.Login =
             m "h1", "Login"
         ]
 
+game.Guess =
+    controller: ->
+        {
+            calories: m.prop 250
+        }
+
+    view: (ctrl, dish) ->
+        m ".sliders", [
+            m "strong", "Calories:"
+            m ".calory_guess", ctrl.calories()
+            m "input[type='range']", {
+                min: 50
+                max: 1000
+                step: 25
+                oninput: m.withAttr "value", ctrl.calories
+                value: ctrl.calories()
+            }
+        ]
+
 game.Main =
     controller: ->
         dishes: game.Dish.list()
