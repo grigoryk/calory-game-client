@@ -1,13 +1,24 @@
 game = {}
 
-# COMPONENTS
+game.ImageViewer =
+    controller: (images) ->
+        current = m.prop 0
+        {
+            current: current
+            next: ->
+                current (current() + 1) % images.length
+        }
+
+    view: (ctrl, images) ->
+        m ".image",
+            m "img",
+                src: images[ctrl.current()].image
+                onclick: ctrl.next
+
 game.DishComponent =
     view: (ctrl, dish) ->
         m "div.dish",
-            m "div.images",
-                dish.images.map (img) ->
-                    m "img",
-                        src: img.image
+            m.component game.ImageViewer, dish.images
             m "span.description", dish.description
 
 # MODEL
